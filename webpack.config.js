@@ -14,10 +14,10 @@ module.exports = {
                 loader: ['style-loader', 'css-loader', 'sass-loader'],
             },
             {
-                test:    /\.elm$/,
+                test: /\.elm$/,
                 loader: 'elm-webpack-loader',
                 options: {
-                    debug: true
+                    debug: process.env.WEBPACK_SERVE ? true : false
                 }
             },
         ],
@@ -30,8 +30,8 @@ module.exports = {
     ],
     mode: process.env.WEBPACK_SERVE ? 'development' : 'production',
     serve: {
-      contentBase: `${__dirname}/dist`,
-      port: '8080',
-      open: true,
+        contentBase: `${__dirname}/dist`,
+        port: '8080',
+        open: true,
     }
 };
