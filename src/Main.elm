@@ -16,14 +16,13 @@ type alias Model =
     { zone : Time.Zone
     , time : Time.Posix
     , counter : Int
-    , limit : Int
     , isStart : Bool
     }
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Model Time.utc (Time.millisToPosix 0) 0 30 False
+    ( Model Time.utc (Time.millisToPosix 0) 0 False
     , Task.perform AdjustTimeZone Time.here
     )
 
@@ -95,9 +94,6 @@ view model =
     let
         c =
             String.fromInt model.counter
-
-        l =
-            String.fromInt model.limit
 
         bt =
             if model.isStart then
