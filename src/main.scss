@@ -3,3 +3,55 @@ $main-padding: 20px;
 #main {
     padding: $main-padding;
 }
+
+grid-container {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.1fr 0.25fr 0.25fr;
+  grid-gap: 1px 1px;
+  grid-template-areas: "start" "counter" "change";
+}
+
+.start {
+  display: grid;
+  grid-area: start;
+  grid-template-columns: 0.5fr 0.5fr;
+  grid-template-rows: 1fr;
+  grid-gap: 1px 1px;
+  grid-template-areas: "start-bt lmit";
+}
+
+.lmit { grid-area: lmit; }
+
+.start-bt { grid-area: start-bt; }
+
+.counter { grid-area: counter; }
+
+.change { grid-area: change; }
+
+
+
+.bt {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.stop-bt {
+    background-color: #f44336;; /* Red */
+}
+
+.change-bt {background-color: #555555;} /* Black */
+
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
