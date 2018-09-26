@@ -12,18 +12,26 @@ import Time
 -- MODEL
 
 
-type alias Model =
-    { zone : Time.Zone
-    , time : Time.Posix
-    , counter : Int
+type alias Player =
+    { limitOverCount : Int }
+
+
+type alias TimeCounter =
+    { counter : Int
     , isStart : Bool
+    }
+
+
+type alias Model =
+    { tc : TimeCounter
+    , p1 : Player
     }
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Model Time.utc (Time.millisToPosix 0) 0 False
-    , Task.perform AdjustTimeZone Time.here
+    ( Model { counter = 0, isStart = False } { limitOverCount = 0 }
+    , Cmd.none
     )
 
 
@@ -33,7 +41,6 @@ init _ =
 
 type Msg
     = Tick Time.Posix
-    | AdjustTimeZone Time.Zone
     | DoTimer
     | ChangePlayer
 
@@ -44,34 +51,42 @@ update msg model =
         Tick newTime ->
             let
                 c =
-                    if model.isStart then
-                        model.counter + 1
+                    if model.tc.isStart then
+                        model.tc.counter + 1
 
                     else
-                        model.counter
-            in
-            ( { model | counter = c }
-            , Cmd.none
-            )
+                        model.tc.counter
 
-        AdjustTimeZone newZone ->
-            ( { model | zone = newZone }
+                flg =
+                    model.tc.isStart
+            in
+            ( { model | tc = { counter = c, isStart = flg } }
             , Cmd.none
             )
 
         DoTimer ->
             let
-                r =
-                    if model.isStart then
+                flg =
+                    if model.tc.isStart then
                         False
 
                     else
                         True
+
+                c =
+                    model.tc.counter
             in
-            ( { model | isStart = r }, Cmd.none )
+            ( { model | tc = { counter = c, isStart = flg } }, Cmd.none )
 
         ChangePlayer ->
-            ( { model | counter = 0 }
+            let
+                flg =
+                    model.tc.isStart
+
+                c =
+                    model.tc.counter
+            in
+            ( { model | tc = { counter = c, isStart = flg } }
             , Cmd.none
             )
 
@@ -93,17 +108,17 @@ view : Model -> Html Msg
 view model =
     let
         c =
-            String.fromInt model.counter
+            String.fromInt model.tc.counter
 
         bt =
-            if model.isStart then
+            if model.tc.isStart then
                 "Stop!"
 
             else
                 "Start"
 
         btClass =
-            if model.isStart then
+            if model.tc.isStart then
                 "bt stop-bt"
 
             else
