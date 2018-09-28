@@ -82,11 +82,8 @@ update msg model =
             let
                 flg =
                     model.tc.isStart
-
-                c =
-                    model.tc.counter
             in
-            ( { model | tc = { counter = c, isStart = flg } }
+            ( { model | tc = { counter = 0, isStart = flg } }
             , Cmd.none
             )
 
