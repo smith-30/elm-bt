@@ -23,14 +23,16 @@ type alias TimeCounter =
 
 
 type alias Model =
-    { tc : TimeCounter
+    { limit : Int
+    , tc : TimeCounter
     , p1 : Player
+    , p2 : Player
     }
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Model { counter = 0, isStart = False } { limitOverCount = 0 }
+    ( Model 30 { counter = 0, isStart = False } { limitOverCount = 0 } { limitOverCount = 0 }
     , Cmd.none
     )
 
