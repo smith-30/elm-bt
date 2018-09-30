@@ -1,7 +1,7 @@
 module Main exposing (Model, Msg(..), init, main, subscriptions, update, view)
 
 import Browser
-import Html exposing (Html, div, h1, img, input, text)
+import Html exposing (Html, div, h1, img, input, p, text)
 import Html.Attributes exposing (class, src, type_, value)
 import Html.Events exposing (onClick)
 import Task
@@ -124,21 +124,48 @@ view model =
                 "bt"
     in
     div [ class "grid-container" ]
-        [ div [ class "start" ]
-            [ div
-                [ class "area-overlap start-bt" ]
-                [ input [ type_ "button", value bt, onClick DoTimer, class btClass ] []
-                ]
+        [ div [ class "player-2" ]
+            [ p
+                []
+                [ text "1" ]
             ]
-        , div
-            [ class "counter" ]
+        , div [ class "counter" ]
             [ h1 [] [ text c ]
             ]
         , div
             [ class "change" ]
             [ input [ type_ "button", value "Change", onClick ChangePlayer, class "bt change-bt" ] []
             ]
+        , div [ class "start" ]
+            [ input [ type_ "button", value bt, onClick DoTimer, class btClass ] [] ]
+        , div [ class "player-1" ]
+            [ p
+                []
+                [ text "1" ]
+            ]
+        , div [ class "limit-input" ]
+            [ input [ type_ "text", value "" ] []
+            ]
         ]
+
+
+
+-- <div class="grid-container">
+--   <div class="player-2">
+--   </div>
+--   <div class="counter">
+--   </div>
+--   <div class="change">
+--   </div>
+--   <div class="start">
+--   </div>
+--   <div class="player-1">
+--   </div>
+--   <div class="limit-input">
+--   </div>
+--   <div class="limit-bt">
+--   </div>
+-- </div>
 
 
 main =
