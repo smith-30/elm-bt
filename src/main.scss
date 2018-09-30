@@ -32,6 +32,8 @@ $main-padding: 20px;
     border: none;
     color: white;
     padding: 15px 32px;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -49,4 +51,9 @@ input[type=text] {
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
+}
+
+h1 {
+    margin-top: 0em;
+    margin-bottom: 0em;
 }

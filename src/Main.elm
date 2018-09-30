@@ -2,8 +2,8 @@ module Main exposing (Model, Msg(..), init, main, subscriptions, update, view)
 
 import Browser
 import Html exposing (Html, div, h1, img, input, p, text)
-import Html.Attributes exposing (class, src, type_, value)
-import Html.Events exposing (onClick)
+import Html.Attributes exposing (class, disabled, placeholder, src, type_, value)
+import Html.Events exposing (onClick, onInput)
 import Task
 import Time
 
@@ -45,6 +45,7 @@ type Msg
     = Tick Time.Posix
     | DoTimer
     | ChangePlayer
+    | NewLimit String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -88,6 +89,20 @@ update msg model =
             ( { model | tc = { counter = 0, isStart = flg } }
             , Cmd.none
             )
+
+        NewLimit l ->
+            let
+                v =
+                    Maybe.withDefault 1 (String.toInt l)
+
+                val =
+                    if v == 0 then
+                        1
+
+                    else
+                        v
+            in
+            ( { model | limit = val }, Cmd.none )
 
 
 
@@ -144,28 +159,9 @@ view model =
                 [ text "1" ]
             ]
         , div [ class "limit-input" ]
-            [ input [ type_ "text", value "" ] []
+            [ input [ type_ "text", value (String.fromInt model.limit), onInput (\l -> NewLimit l), disabled model.tc.isStart ] []
             ]
         ]
-
-
-
--- <div class="grid-container">
---   <div class="player-2">
---   </div>
---   <div class="counter">
---   </div>
---   <div class="change">
---   </div>
---   <div class="start">
---   </div>
---   <div class="player-1">
---   </div>
---   <div class="limit-input">
---   </div>
---   <div class="limit-bt">
---   </div>
--- </div>
 
 
 main =
