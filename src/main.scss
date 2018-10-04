@@ -32,7 +32,7 @@ $main-padding: 20px;
     border: none;
     color: white;
     padding: 15px 32px;
-    margin-top: 0.3em;
+    margin-top: 0.5em;
     margin-bottom: 0.3em;
     text-align: center;
     text-decoration: none;
@@ -56,4 +56,12 @@ input[type=text] {
 h1 {
     margin-top: 0em;
     margin-bottom: 0em;
+}
+
+.turn {
+  background-color: #e6ee9c;
+}
+
+.p-txt {
+  margin-left: 0.3em;
 }

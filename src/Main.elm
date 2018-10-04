@@ -13,7 +13,7 @@ import Time
 
 
 type alias Player =
-    { limitOverCount : Int }
+    { limitOverCount : Int, turn : String }
 
 
 type alias TimeCounter =
@@ -24,6 +24,7 @@ type alias TimeCounter =
 
 type alias Model =
     { limit : Int
+    , turn : Int
     , tc : TimeCounter
     , p1 : Player
     , p2 : Player
@@ -32,7 +33,7 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Model 30 { counter = 0, isStart = False } { limitOverCount = 0 } { limitOverCount = 0 }
+    ( Model 30 1 { counter = 0, isStart = False } { limitOverCount = 0, turn = "turn" } { limitOverCount = 0, turn = "" }
     , Cmd.none
     )
 
@@ -85,8 +86,22 @@ update msg model =
             let
                 flg =
                     model.tc.isStart
+
+                updatedP1 =
+                    if model.p2.turn == "turn" then
+                        { limitOverCount = model.p1.limitOverCount, turn = "turn" }
+
+                    else
+                        { limitOverCount = model.p1.limitOverCount, turn = "" }
+
+                updatedP2 =
+                    if model.p1.turn == "turn" then
+                        { limitOverCount = model.p2.limitOverCount, turn = "turn" }
+
+                    else
+                        { limitOverCount = model.p2.limitOverCount, turn = "" }
             in
-            ( { model | tc = { counter = 0, isStart = flg } }
+            ( { model | tc = { counter = 0, isStart = flg }, p1 = updatedP1, p2 = updatedP2 }
             , Cmd.none
             )
 
@@ -124,6 +139,12 @@ view model =
         c =
             String.fromInt model.tc.counter
 
+        p1Over =
+            String.fromInt model.p1.limitOverCount
+
+        p2Over =
+            String.fromInt model.p2.limitOverCount
+
         bt =
             if model.tc.isStart then
                 "Stop!"
@@ -139,24 +160,24 @@ view model =
                 "bt"
     in
     div [ class "grid-container" ]
-        [ div [ class "player-2" ]
+        [ div [ class "player-2", class model.p2.turn ]
             [ p
-                []
-                [ text "1" ]
+                [ class "p-txt" ]
+                [ text "Player 2 over: ", text p2Over ]
             ]
         , div [ class "counter" ]
             [ h1 [] [ text c ]
             ]
         , div
             [ class "change" ]
-            [ input [ type_ "button", value "Change", onClick ChangePlayer, class "bt change-bt" ] []
+            [ input [ type_ "button", value "Change", onClick ChangePlayer, class "bt change-bt", disabled (not model.tc.isStart) ] []
             ]
         , div [ class "start" ]
             [ input [ type_ "button", value bt, onClick DoTimer, class btClass ] [] ]
-        , div [ class "player-1" ]
+        , div [ class "player-1", class model.p1.turn ]
             [ p
-                []
-                [ text "1" ]
+                [ class "p-txt" ]
+                [ text "Player 1 over: ", text p1Over ]
             ]
         , div [ class "limit-input" ]
             [ input [ type_ "text", value (String.fromInt model.limit), onInput (\l -> NewLimit l), disabled model.tc.isStart ] []
