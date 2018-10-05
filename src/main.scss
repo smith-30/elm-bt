@@ -10,7 +10,7 @@ $main-padding: 20px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 0.25fr 0.3fr 0.3fr 0.3fr 2.5fr;
   grid-gap: 1px;
-  grid-template-areas: "player-1 player-1 player-2 player-2" "start start counter ." "change change . ." "limit-input . . ." ". . . .";
+  grid-template-areas: "player-1 player-1 player-2 player-2" "start start counter ." "change change . ." "limit-input . . ." "reset . . .";
 }
 
 .player-2 { grid-area: player-2; }
@@ -24,6 +24,8 @@ $main-padding: 20px;
 .player-1 { grid-area: player-1; }
 
 .limit-input { grid-area: limit-input; }
+
+.reset { grid-area: reset; }
 
 
 
@@ -45,6 +47,11 @@ $main-padding: 20px;
 }
 
 .change-bt {background-color: #555555;} /* Black */
+
+.reset-bt {
+  background-color: #F5F5F5;
+  color: black;
+}
 
 input[type=text] {
     width: 100%;

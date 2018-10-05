@@ -13,7 +13,7 @@ import Time
 
 
 type alias Player =
-    { limitOverCount : Int, turn : String }
+    { limitOverSec : Int, turn : String }
 
 
 type alias TimeCounter =
@@ -33,7 +33,7 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Model 30 1 { counter = 0, isStart = False } { limitOverCount = 0, turn = "turn" } { limitOverCount = 0, turn = "" }
+    ( Model 30 1 { counter = 0, isStart = False } { limitOverSec = 0, turn = "turn" } { limitOverSec = 0, turn = "" }
     , Cmd.none
     )
 
@@ -47,6 +47,7 @@ type Msg
     | DoTimer
     | ChangePlayer
     | NewLimit String
+    | Reset
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -54,28 +55,51 @@ update msg model =
     case msg of
         Tick newTime ->
             let
-                c =
+                ( c, flg ) =
                     if model.tc.isStart then
-                        model.tc.counter + 1
+                        ( model.tc.counter + 1, model.tc.isStart )
 
                     else
-                        model.tc.counter
+                        ( model.tc.counter, model.tc.isStart )
 
-                flg =
-                    model.tc.isStart
+                isIncrement =
+                    if c > model.limit then
+                        True
+
+                    else
+                        False
+
+                ( updatedP1, updatedP2 ) =
+                    if isIncrement then
+                        if model.p1.turn == "turn" then
+                            let
+                                sec =
+                                    model.p1.limitOverSec + 1
+                            in
+                            ( { limitOverSec = sec, turn = "turn" }
+                            , model.p2
+                            )
+
+                        else
+                            let
+                                sec =
+                                    model.p2.limitOverSec + 1
+                            in
+                            ( model.p1
+                            , { limitOverSec = sec, turn = "turn" }
+                            )
+
+                    else
+                        ( model.p1, model.p2 )
             in
-            ( { model | tc = { counter = c, isStart = flg } }
+            ( { model | tc = { counter = c, isStart = flg }, p1 = updatedP1, p2 = updatedP2 }
             , Cmd.none
             )
 
         DoTimer ->
             let
                 flg =
-                    if model.tc.isStart then
-                        False
-
-                    else
-                        True
+                    not model.tc.isStart
 
                 c =
                     model.tc.counter
@@ -89,13 +113,13 @@ update msg model =
 
                 ( updatedP1, updatedP2 ) =
                     if model.p2.turn == "turn" then
-                        ( { limitOverCount = model.p1.limitOverCount, turn = "turn" }
-                        , { limitOverCount = model.p2.limitOverCount, turn = "" }
+                        ( { limitOverSec = model.p1.limitOverSec, turn = "turn" }
+                        , { limitOverSec = model.p2.limitOverSec, turn = "" }
                         )
 
                     else
-                        ( { limitOverCount = model.p1.limitOverCount, turn = "" }
-                        , { limitOverCount = model.p2.limitOverCount, turn = "turn" }
+                        ( { limitOverSec = model.p1.limitOverSec, turn = "" }
+                        , { limitOverSec = model.p2.limitOverSec, turn = "turn" }
                         )
             in
             ( { model | tc = { counter = 0, isStart = flg }, p1 = updatedP1, p2 = updatedP2 }
@@ -115,6 +139,9 @@ update msg model =
                         v
             in
             ( { model | limit = val }, Cmd.none )
+
+        Reset ->
+            init ()
 
 
 
@@ -137,10 +164,10 @@ view model =
             String.fromInt model.tc.counter
 
         p1Over =
-            String.fromInt model.p1.limitOverCount
+            String.fromInt model.p1.limitOverSec
 
         p2Over =
-            String.fromInt model.p2.limitOverCount
+            String.fromInt model.p2.limitOverSec
 
         bt =
             if model.tc.isStart then
@@ -178,6 +205,9 @@ view model =
             ]
         , div [ class "limit-input" ]
             [ input [ type_ "text", value (String.fromInt model.limit), onInput (\l -> NewLimit l), disabled model.tc.isStart ] []
+            ]
+        , div [ class "reset" ]
+            [ input [ type_ "button", value "Reset", onClick Reset, class "bt reset-bt" ] []
             ]
         ]
 
