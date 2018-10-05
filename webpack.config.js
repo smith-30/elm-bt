@@ -31,7 +31,7 @@ module.exports = {
     mode: process.env.WEBPACK_SERVE ? 'development' : 'production',
     serve: {
         contentBase: `${__dirname}/dist`,
-        port: '8080',
+        port: '11111',
         open: true,
     }
 };
