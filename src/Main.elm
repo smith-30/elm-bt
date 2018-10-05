@@ -87,19 +87,16 @@ update msg model =
                 flg =
                     model.tc.isStart
 
-                updatedP1 =
+                ( updatedP1, updatedP2 ) =
                     if model.p2.turn == "turn" then
-                        { limitOverCount = model.p1.limitOverCount, turn = "turn" }
+                        ( { limitOverCount = model.p1.limitOverCount, turn = "turn" }
+                        , { limitOverCount = model.p2.limitOverCount, turn = "" }
+                        )
 
                     else
-                        { limitOverCount = model.p1.limitOverCount, turn = "" }
-
-                updatedP2 =
-                    if model.p1.turn == "turn" then
-                        { limitOverCount = model.p2.limitOverCount, turn = "turn" }
-
-                    else
-                        { limitOverCount = model.p2.limitOverCount, turn = "" }
+                        ( { limitOverCount = model.p1.limitOverCount, turn = "" }
+                        , { limitOverCount = model.p2.limitOverCount, turn = "turn" }
+                        )
             in
             ( { model | tc = { counter = 0, isStart = flg }, p1 = updatedP1, p2 = updatedP2 }
             , Cmd.none
