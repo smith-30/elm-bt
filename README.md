@@ -1,4 +1,9 @@
-# Elm Develop Environment
+# elm-bt
+
+elm battle timer
+application page is [here](https://smith-30.github.io/elm-bt/)
+
+## Elm Develop Environment
 
 fork from https://github.com/ababup1192/elm-dev-env
 
