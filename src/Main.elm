@@ -150,7 +150,11 @@ update msg model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Time.every 1000 Tick
+    if model.tc.isStart then
+        Time.every 1000 Tick
+
+    else
+        Sub.none
 
 
 
